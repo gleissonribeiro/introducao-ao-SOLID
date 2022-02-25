@@ -1,0 +1,336 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Documentação da API de cadastro de usuários",
+    "description": "Este documento documenta a API para cadastro de usuários",
+    "version": "1.0.0",
+    "contact": {
+      "email": "eu@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create new user",
+        "description": "Create a new user if it not already exists",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Paul",
+                  "email": "paul@email.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New user created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "upadated_at": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "uuid": "ef7243f3-9af4-41f2-bf41-5a1bf8a6e089",
+                    "name": "Paul",
+                    "email": "paul@email.com",
+                    "admin": false,
+                    "created_at": "2022-02-25T14:18:44.135Z",
+                    "updated_at": "2022-02-25T14:18:44.135Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "desciption": "Email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "email already exists"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all the users",
+        "description": "Get all the users",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "required": "true",
+            "description": "String uuid of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get array with all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "uuid": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "string"
+                      },
+                      "upadated_at": {
+                        "type": "string"
+                      }
+                    },
+                    "example": {
+                      "uuid": "ef7243f3-9af4-41f2-bf41-5a1bf8a6e089",
+                      "name": "Paul",
+                      "email": "paul@email.com",
+                      "admin": false,
+                      "created_at": "2022-02-25T14:18:44.135Z",
+                      "updated_at": "2022-02-25T14:18:44.135Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not found or user does not have admin privilegies to get all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "user has no privilegies to list all users"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Turn user to admin",
+        "description": "Turn the previlegies user to admin",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "uuid string of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the user if the privilegies were updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "upadated_at": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "uuid": "ef7243f3-9af4-41f2-bf41-5a1bf8a6e089",
+                    "name": "Paul",
+                    "email": "paul@email.com",
+                    "admin": true,
+                    "created_at": "2022-02-25T14:18:44.135Z",
+                    "updated_at": "2022-02-25T14:18:44.135Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "user not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get a user with user_id",
+        "description": "Get a user with user_id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": "true",
+            "description": "String uuid of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "upadated_at": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "uuid": "ef7243f3-9af4-41f2-bf41-5a1bf8a6e089",
+                    "name": "Paul",
+                    "email": "paul@email.com",
+                    "admin": false,
+                    "created_at": "2022-02-25T14:18:44.135Z",
+                    "updated_at": "2022-02-25T14:18:44.135Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "user not found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
